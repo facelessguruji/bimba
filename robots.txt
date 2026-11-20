@@ -1,0 +1,16 @@
+User-agent: *
+Disallow: /063abe0a
+Disallow: /install
+Disallow: /cron
+Disallow: /ipn
+Disallow: /user/logout
+Disallow: /admin/logout
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /

@@ -1,0 +1,110 @@
+/* ═══════════════════════════════════════════════════════════════
+   LEADXGPT AGENT CARD - Polish Stylesheet (desktop / 1440 focus)
+   Owns: card consistency, icon alignment, 8px spacing rhythm,
+   element placement. Loaded after leadxgpt-ui.css, before
+   leadxgpt-contrast.css. Tight selectors only, no blanket * rules.
+   Mobile is owned by leadxgpt-mobile.css: everything here is
+   desktop-first and every grouping below is guarded with a
+   min-width media query where a small-screen collision exists.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────
+   P1. BUTTONS + ICONS (both panels)
+   Compact button labels never wrap ("Sear ch"), and line-awesome
+   glyphs are text: give every icon inside a button a centered,
+   single-line box so it sits on the label's optical middle.
+   ───────────────────────────────────────────────────────────── */
+.btn--sm,
+.btn-sm,
+.breadcrumb-plugins form .btn{
+  white-space:nowrap;
+}
+.btn .las,
+.btn .la,
+.btn [class^='la-'],
+.btn [class*=' la-']{
+  line-height:1;
+  display:inline-grid;
+  place-items:center;
+  vertical-align:middle;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   P2. MEMBER PANEL: header search rows (Affiliate Hub etc.)
+   Input + button share one height; the button keeps its natural
+   width instead of being squeezed into a two-line "Sear ch".
+   ───────────────────────────────────────────────────────────── */
+.lx-dash .card-header form.d-flex{
+  align-items:stretch;
+}
+.lx-dash .card-header form.d-flex .btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding-top:0;
+  padding-bottom:0;
+}
+
+/* Member full-width CTA (Affiliate Hub "Withdraw Earnings"):
+   it carries a long inline label, so let it wrap cleanly with
+   even line rhythm instead of a cramped centered mash. */
+.lx-dash a.btn--base.w-100{
+  white-space:normal;
+  line-height:1.5;
+  padding:10px 16px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   P3. STAT CARD HEADERS: align the big value baselines across a
+   grid row. Two-line labels must reserve the same box so values
+   line up (member .lx-stat + admin .widget-seven).
+   ───────────────────────────────────────────────────────────── */
+.lx-dash .lx-stat .caption{
+  line-height:1.35;
+  min-height:31px;
+}
+body.lgx-admin .widget-seven .widget-seven__content-title{
+  line-height:1.35;
+  min-height:31px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   P4. PRICING: "Current Plan" capsule stays an inline pill
+   (display:flex was stretching it across the whole card head).
+   ───────────────────────────────────────────────────────────── */
+.pricing-card .current-plan-badge{
+  display:inline-flex !important;
+  justify-content:center;
+  max-width:100%;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   P5. PUBLIC HOME: category and city grids fill their row at any
+   item count (4 categories no longer leave two dead tracks).
+   Desktop only; the fixed responsive collapses below 1024px are
+   owned by leadxgpt-ui.css and kept intact.
+   ───────────────────────────────────────────────────────────── */
+@media (min-width:1025px){
+  .lgx-cats{
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  }
+  .lgx-cities{
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   P6. ADMIN TABLES: action cells (.button--group = Edit button +
+   toggle form) rendered stacked and doubled every row height.
+   Lay the controls on one line, vertically centered.
+   ───────────────────────────────────────────────────────────── */
+body.lgx-admin .table td .button--group{
+  display:inline-flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+body.lgx-admin .table td .button--group form{
+  display:inline-flex;
+  margin:0;
+}

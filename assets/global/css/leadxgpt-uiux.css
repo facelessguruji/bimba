@@ -1,0 +1,391 @@
+/* ═══════════════════════════════════════════════════════════════
+   LEADXGPT AGENT UIUX - Design-conformance stylesheet (last layer)
+   Owned by Agent UIUX only. Loads AFTER leadxgpt-contrast.css in
+   both layouts, so pure-aesthetic rules here win the cascade.
+   Scope: brand conformance only (donor-color leftovers, component
+   consistency with the approved demo language). No layout, no
+   contrast fixes (COLOR owns those), no spacing/overflow (CARD /
+   MOBILE own those), no functionality.
+
+   Brand tokens (from the approved demos):
+     gradient 135deg #4F46E5 -> #7C3AED   ink #0F172A
+     slate text #475569 / #64748B          line #E8EDF3
+     indigo tint #EEF2FF / #4F46E5
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────
+   U1. ADMIN SIDEBAR SCROLLBAR (donor dark-theme leftover)
+   assets/admin/css/app.css 7701-7716 paints the sidebar menu
+   scrollbar track #071251 (dark navy) with a #4634ff thumb - the
+   donor's dark sidebar is now light (#FBFCFE), so this renders as
+   a floating dark strip on the light rail. Match the light rail.
+   ───────────────────────────────────────────────────────────── */
+.sidebar__menu-wrapper {
+    scrollbar-color: #CBD5E1 #F1F5F9; /* Firefox */
+}
+.sidebar__menu-wrapper::-webkit-scrollbar {
+    width: 5px;
+}
+.sidebar__menu-wrapper::-webkit-scrollbar-track {
+    background: #F1F5F9;
+}
+.sidebar__menu-wrapper::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+}
+.sidebar__menu-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8 !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   U2. ADMIN "CONFIGURE CARD" FLOATING BUTTON + PANEL HEADER
+   (donor blue leftovers). app.css 8441 + 8524 hardcode a blue
+   45deg gradient (#044aff -> #008eff) on the spinning gear button
+   and its popup header. Every other admin accent is the LeadxGPT
+   indigo-violet gradient; bring these two in line.
+   ───────────────────────────────────────────────────────────── */
+.configure-card-btn {
+    background: linear-gradient(135deg, #4F46E5, #7C3AED) !important;
+    box-shadow: 0 8px 24px rgba(79, 70, 229, .25);
+}
+.configure-card-header {
+    background-image: linear-gradient(135deg, #4F46E5, #7C3AED) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   U3. ADMIN DASHBOARD MONTHLY REPORT BAR (donor default blue).
+   ApexCharts has no explicit color in the dashboard blade, so the
+   bar renders the library default rgba(0,143,251,1) - the only
+   blue element on the light admin. CSS can restyle the SVG fill
+   attribute; scope to the dashboard chart id only. The demo
+   admin.html bars are a violet->indigo ramp; solid brand indigo
+   keeps gridlines/labels untouched.
+   ───────────────────────────────────────────────────────────── */
+#apex-bar-chart .apexcharts-series path {
+    fill: #6D5BE8 !important; /* brand ramp midpoint, reads as the demo's gradient bar */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   U4. MEMBER FORM HINTS MISREAD AS ERRORS.
+   user/listing/form.blade.php marks INFORMATIONAL plan limits
+   ("You can add maximum amount of ...") with small.text--danger,
+   both inside .form--label (gallery images, videos) and beside
+   the section h5 in .create-listing-form-body (amenities), so
+   quota hints render alarm-red. Real errors live below inputs,
+   never inside labels or beside section titles, so these scopes
+   cannot hide a genuine validation message.
+   Demo language: hints are slate, 500 weight.
+   ───────────────────────────────────────────────────────────── */
+.form--label small.text--danger,
+.create-listing-form-body h5 + small.text--danger {
+    color: #64748B !important;
+    font-weight: 500;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   U5. MEMBER DASHBOARD EVENT COUNT CHIPS.
+   "Followed / Interested / Joined Events" counts use badge--info
+   (cyan tint) while every other count chip in the product uses
+   the indigo tint (sidebar .n badges, "Organiser" badge--base,
+   demo user.html .n = #EEF2FF bg + #4F46E5 text). Unify counts
+   to the indigo tint; status badges elsewhere keep cyan.
+   ───────────────────────────────────────────────────────────── */
+.lx-dash .lx-subcard h6 .badge--info {
+    background: #EEF2FF !important;
+    color: #4F46E5 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ORCHESTRATOR FIXES (round: dropdown stacking + stat card uniformity)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1. Admin notification/profile dropdowns were trapped BEHIND page cards:
+      the topbar's blur filter created a stacking context that boxed the
+      dropdown in. Solid topbar + explicit z-index layering. */
+body.lgx-admin .navbar-wrapper{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  filter:none !important;
+  background:#fff !important;
+  position:relative;
+  z-index:1050;
+}
+body.lgx-admin .navbar-wrapper .dropdown-menu{
+  z-index:1200 !important;
+}
+body.lgx-admin .navbar-wrapper .dropdown,
+body.lgx-admin .navbar-wrapper .dropdown.profile-dropdown{
+  position:static;
+}
+body.lgx-admin .navbar-wrapper .dropdown .dropdown-menu{
+  position:absolute;
+}
+
+/* 2. Member dashboard stat cards: uniform icon-left layout regardless of
+      DOM order (some cards had icon-first markup, others text-first, so
+      row-reverse flipped icons to the right on half the row). */
+.lx-dash .lx-stat{
+  flex-direction:row !important;
+  align-items:center;
+  gap:14px;
+}
+.lx-dash .lx-stat .ico{
+  order:-1 !important;
+  flex:none;
+}
+
+/* 3. Version strip at sidebar bottom: match the light sidebar language */
+body.lgx-admin .sidebar .version-info{
+  background:transparent !important;
+  color:var(--lgx-ink3) !important;
+}
+body.lgx-admin .sidebar .version-info .text--primary{color:var(--lgx-ink2) !important}
+body.lgx-admin .sidebar .version-info .text--success{color:var(--lgx-green) !important}
+
+/* 4. Stat card text column: explicit label-above-value, vertically centered */
+.lx-dash .lx-stat__text{
+  display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0;
+}
+.lx-dash .lx-stat__text .caption{order:1}
+.lx-dash .lx-stat__text .digit{order:2;margin:0;line-height:1.15}
+
+/* 5. Sidebar brand (admin + member): CSS wordmark, no baked-in image tagline */
+body.lgx-admin .sidebar__main-logo.lgx-side-brand,
+.lx-side__brand .lgx-mark{
+  display:inline-flex;align-items:center;gap:10px;text-decoration:none;
+}
+body.lgx-admin .sidebar__main-logo.lgx-side-brand .lgx-mark{
+  width:36px;height:36px;border-radius:10px;background:var(--lgx-grad);color:#fff;
+  display:inline-grid;place-items:center;font:800 16px var(--lgx-font);
+}
+body.lgx-admin .sidebar__main-logo.lgx-side-brand b{color:var(--lgx-ink);font:800 17px var(--lgx-font)}
+.lx-side__brand .lgx-mark{
+  width:36px;height:36px;border-radius:10px;background:var(--lgx-grad);color:#fff;
+  display:inline-grid;place-items:center;font:800 16px var(--lgx-font);
+}
+
+/* 6. Header CTA buttons (Login / List Your Business / Account): full-size,
+      properly designed inside the 68px bar — nav link padding must not
+      shrink them (specificity fix) */
+.lgx-nav__cta .btn-lgx{
+  padding:12px 22px !important;
+  font-size:14px !important;
+  line-height:1 !important;
+  border-radius:10px !important;
+  white-space:nowrap;
+}
+.lgx-nav__cta .btn-lgx.btn-lgx-primary{
+  background:var(--lgx-grad) !important;
+  color:#fff !important;
+  box-shadow:var(--lgx-sh3);
+}
+.lgx-nav__cta .btn-lgx.btn-lgx-ghost{
+  background:#fff !important;
+  border:1px solid var(--lgx-line) !important;
+  color:var(--lgx-ink2) !important;
+}
+.lgx-nav__cta .btn-lgx.btn-lgx-ghost:hover{
+  border-color:var(--lgx-brand);
+  color:var(--lgx-brand);
+}
+.lgx-nav__cta .btn-lgx i{line-height:1}
+
+/* 7. Admin dashboard spacing + nested widget seams */
+body.lgx-admin .bodywrapper__inner .row.mb-none-30{margin-bottom:24px}
+body.lgx-admin .widget-seven{
+  padding:20px;border:1px solid var(--lgx-line);border-radius:16px;background:#fff;box-shadow:0 1px 2px rgba(15,23,42,.05);
+}
+body.lgx-admin .widget-seven .row{row-gap:12px !important}
+body.lgx-admin .widget-seven .widget-card{
+  height:100%;border-radius:12px;background:#F8FAFF;border:1px solid var(--lgx-line);
+}
+body.lgx-admin .card-header{border-bottom:1px solid var(--lgx-line);background:#fff}
+
+/* 8. Widget-seven anatomy fix: text was crushed to 83px (icon 44 + arrow 30
+      + gap 5 ate the card). Block wrapper + real flex distribution. */
+body.lgx-admin a .widget-seven{display:flex}
+body.lgx-admin a[class*="col-"]{display:block}
+body.lgx-admin .widget-seven{
+  gap:16px !important;
+  padding:18px 20px !important;
+  height:100%;
+  box-sizing:border-box;
+}
+body.lgx-admin .widget-seven .widget-seven__description{
+  flex:1 1 auto;
+  min-width:0;
+}
+body.lgx-admin .widget-seven .widget-seven__content{
+  align-items:center;
+  gap:14px;
+  min-width:0;
+}
+body.lgx-admin .widget-seven .widget-seven__content-icon{flex:none}
+body.lgx-admin .widget-seven .widget-seven__content-title{
+  font:600 11.5px/1.35 var(--lgx-font) !important;
+  color:var(--lgx-ink3) !important;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin:0 0 4px;
+}
+body.lgx-admin .widget-seven .widget-seven__content-amount{
+  font:800 19px/1.2 var(--lgx-font) !important;
+  color:var(--lgx-ink) !important;
+  margin:0;
+}
+body.lgx-admin .widget-seven .widget-seven__arrow{margin-left:auto;flex:none}
+
+/* 9. Admin dashboard card spacing system: single-frame design.
+      Outer card = the frame; inner mini-cards = soft tinted panels
+      (no double borders), real gutters, even rhythm. */
+body.lgx-admin .bodywrapper__inner > .card{
+  padding:24px;
+  border-radius:16px;
+}
+body.lgx-admin .bodywrapper__inner > .card .card-body{padding:0}
+body.lgx-admin .bodywrapper__inner .card .row{
+  --bs-gutter-x:16px;
+  --bs-gutter-y:16px;
+}
+body.lgx-admin .bodywrapper__inner .card .widget-seven{
+  background:#F8FAFF;
+  border:1px solid var(--lgx-line);
+  box-shadow:none;
+  border-radius:12px;
+  padding:14px 16px !important;
+  gap:12px !important;
+  height:100%;
+}
+body.lgx-admin .bodywrapper__inner .card .widget-seven .widget-seven__content-title{
+  margin-bottom:2px;
+}
+body.lgx-admin .bodywrapper__inner .card .widget-seven .widget-seven__content-amount{
+  font-size:17px !important;
+}
+/* equal-height cards belong to the DASHBOARD rows only: scope to cards that
+   actually contain a widget-seven stat. The old blanket height:100% rule
+   stretched EVERY admin column card to its column height, leaving pages
+   like listing details as giant empty boxes. */
+body.lgx-admin .bodywrapper__inner > .row > * > .card:has(.widget-seven){
+  height:100%;
+}
+/* even vertical rhythm between dashboard rows */
+body.lgx-admin .bodywrapper__inner > .row{margin-bottom:0}
+body.lgx-admin .bodywrapper__inner > .row + .row{margin-top:20px}
+body.lgx-admin .bodywrapper__inner > .row.mb-none-30{margin-bottom:20px}
+
+/* 10. Dashboard mini-card grid: real 2x2 at every desktop width,
+       breathing room between value and label, mini-card inner spacing */
+body.lgx-admin .bodywrapper__inner .card .widget-seven .widget-seven__description{
+  display:flex;flex-direction:column;gap:2px;
+}
+body.lgx-admin .bodywrapper__inner .card .widget-seven .widget-seven__content-title{order:1}
+body.lgx-admin .bodywrapper__inner .card .widget-seven .widget-seven__content-amount{order:2}
+body.lgx-admin .bodywrapper__inner .card .widget-seven .widget-seven__content-icon{order:0}
+body.lgx-admin .bodywrapper__inner .card .widget-seven{
+  align-items:center;
+}
+
+/* 10. Dashboard mini-card grid: real 2x2 at every desktop width,
+       breathing room between value and label, mini-card inner spacing */
+body.lgx-admin .bodywrapper__inner .card .widget-seven .widget-seven__description{
+  display:flex;flex-direction:column;gap:2px;min-width:0;
+}
+body.lgx-admin .bodywrapper__inner .card .widget-seven .widget-seven__content-title{order:1}
+body.lgx-admin .bodywrapper__inner .card .widget-seven .widget-seven__content-amount{order:2}
+body.lgx-admin .bodywrapper__inner .card .widget-seven .widget-seven__content-icon{order:0}
+body.lgx-admin .bodywrapper__inner .card .widget-seven{
+  align-items:center;
+}
+
+/* 11. MORE breathing room between dashboard mini-cards (owner feedback) */
+body.lgx-admin .bodywrapper__inner .card .row{
+  --bs-gutter-x:20px;
+  --bs-gutter-y:20px;
+}
+body.lgx-admin .bodywrapper__inner .card .widget-seven .row{
+  row-gap:18px !important;
+  column-gap:18px !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
+body.lgx-admin .bodywrapper__inner .card .widget-seven .row > *{
+  padding-left:0 !important;
+  padding-right:0 !important;
+}
+body.lgx-admin .bodywrapper__inner .card .widget-seven{
+  padding:16px 18px !important;
+}
+body.lgx-admin .bodywrapper__inner > .card{margin-bottom:4px}
+body.lgx-admin .bodywrapper__inner .card .widget-seven__description{gap:4px}
+body.lgx-admin .bodywrapper__inner .card .widget-seven .widget-seven__arrow{margin-left:12px}
+
+/* 13. Admin search pill: tightened (owner: too much empty space in the search place) */
+body.lgx-admin .navbar-search{
+  max-width:280px;
+  padding:4px 6px;
+  gap:0;
+}
+body.lgx-admin .navbar-search .navbar-search-field{
+  padding:9px 14px 9px 34px !important;
+  font-size:13.5px;
+}
+body.lgx-admin .navbar-search .navbar-search-shortcut{
+  padding:3px 7px;
+  font-size:10.5px;
+}
+body.lgx-admin .navbar-search .navbar-search-shortcut kbd{
+  font-size:10px;
+  padding:1px 4px;
+}
+body.lgx-admin .navbar-wrapper .navbar__left{flex:0 1 auto}
+
+/* 14. Search pill: compact final (owner: still too much empty space) */
+body.lgx-admin .navbar-search{
+  width:240px;
+  min-width:200px;
+  max-width:240px;
+}
+body.lgx-admin .navbar-search .navbar-search-field{
+  padding:9px 12px 9px 30px !important;
+  font-size:13px;
+}
+
+/* ── lgx-switch: the one uniform toggle (single source of truth).
+     ONE size everywhere (no big/small mix): 46x24 pill, 18px knob, 22px travel.
+     Off: soft slate. On: brand gradient. Knob: white with layered shadow.
+     Table rows with a STATUS badge stay clean pill-only; form switches that
+     have no badge carry a state word pair (.lgx-switch-state) where ONLY the
+     current state's word shows (green = on word, red = off word). ── */
+.lgx-switch{position:relative;display:inline-flex;align-items:center;gap:10px;width:auto;height:auto;cursor:pointer;vertical-align:middle}
+.lgx-switch input{position:absolute;opacity:0;width:0;height:0}
+.lgx-switch .lgx-switch__track{position:relative;flex:none;width:46px;height:24px;background:#E2E8F0;border-radius:999px;transition:background .2s ease;box-shadow:inset 0 1px 2px rgba(15,23,42,.08)}
+.lgx-switch .lgx-switch__track:before{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s cubic-bezier(.4,0,.2,1);box-shadow:0 1px 3px rgba(15,23,42,.3),0 2px 6px rgba(15,23,42,.12)}
+.lgx-switch:hover .lgx-switch__track{background:#CBD5E1}
+.lgx-switch input:checked ~ .lgx-switch__track{background:var(--lgx-grad)}
+.lgx-switch input:checked ~ .lgx-switch__track:before{transform:translateX(22px)}
+.lgx-switch input:focus-visible ~ .lgx-switch__track{box-shadow:0 0 0 3px rgba(79,70,229,.25)}
+/* sm is now identical to base: one professional size everywhere */
+.lgx-switch.lgx-switch-sm{width:auto;height:auto}
+.lgx-switch.lgx-switch-sm .lgx-switch__track{width:46px;height:24px}
+.lgx-switch.lgx-switch-sm .lgx-switch__track:before{width:18px;height:18px}
+.lgx-switch.lgx-switch-sm input:checked ~ .lgx-switch__track:before{transform:translateX(22px)}
+/* state word pair: exactly one of the two words is visible, matched to context
+   (Enabled/Disabled, Verified/Unverified, Active/Banned) */
+.lgx-switch .lgx-switch-state{position:static;inset:auto;flex:none;display:inline-flex;align-items:center;background:none;box-shadow:none;border-radius:0;font:600 12px/1 var(--lgx-font);letter-spacing:.2px;white-space:nowrap}
+.lgx-switch .lgx-switch-state:before,
+.lgx-switch .lgx-switch-state:after{content:none !important}
+/* the legacy .lgx-switch span{position:absolute;inset:0;background:#CBD5E1;
+   border-radius:999px} + span::before{white knob} rules must never capture
+   the state words: strip every visual AND both pseudo-elements, or the
+   st-on span paints a ghost knob on the track (the double-circle bug) */
+.lgx-switch .lgx-switch-state .st-on,
+.lgx-switch .lgx-switch-state .st-off{position:static;inset:auto;background:none;border:0;border-radius:0;box-shadow:none;padding:0;margin:0;font-weight:600}
+.lgx-switch .lgx-switch-state .st-on::before,
+.lgx-switch .lgx-switch-state .st-on::after,
+.lgx-switch .lgx-switch-state .st-off::before,
+.lgx-switch .lgx-switch-state .st-off::after{content:none !important}
+.lgx-switch .lgx-switch-state .st-on{display:none;color:#059669}
+.lgx-switch .lgx-switch-state .st-off{display:inline;color:#DC2626}
+.lgx-switch input:checked ~ .lgx-switch-state .st-on{display:inline}
+.lgx-switch input:checked ~ .lgx-switch-state .st-off{display:none}
+

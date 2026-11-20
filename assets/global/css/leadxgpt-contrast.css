@@ -1,0 +1,213 @@
+/* ============================================================
+   LEADXGPT AGENT COLOR - Contrast Enforcement Stylesheet
+   Loaded LAST on every page (front + admin). Fixes WCAG
+   contrast violations only: dark text on light surfaces,
+   light text on dark surfaces, >= 4.5:1 normal text,
+   >= 3.0:1 large text. No layout / positioning changes.
+   ------------------------------------------------------------
+   Ink tokens used below (all pass 4.5:1 on white AND on the
+   theme's tinted surfaces #F6F8FB / #FAFBFD / #F1F5F9 /
+   #EEF2FF / #ECFDF5 / #FEF2F2):
+     #475569 slate-600  |  #334155 slate-700  |  #1E293B slate-800
+     #4338CA indigo-700 |  #047857 emerald-700 |  #0E7490 cyan-700
+     #B91C1C red-700    |  #C2410C orange-700 |  #B45309 amber-700
+     #166534 green-800  |  #1D4ED8 blue-700   |  #0369A1 sky-700
+   ============================================================ */
+
+/* ─────────────────────────────────────────────────────────────
+   1. PLACEHOLDERS  (was rgb(148,163,184) = 2.56:1 on white,
+      rgb(201,201,201) = 1.56:1 in the admin topbar, and
+      rgb(117,117,117) = 4.33:1 in the hero search)
+      Mirrors assets/admin/css/app.css 3130: the donor pins
+      #c9c9c9 !important on input:not([type='radio']), so the
+      same specificity is required to beat it. */
+/* NOTE: each pseudo-element family lives in its OWN rule. Mixing
+   ::-webkit/-moz/-placeholder selectors in one comma group would
+   invalidate the entire rule in Chromium. */
+input:not([type='radio'])::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder { color: #475569 !important; }
+
+input:not([type='radio'])::placeholder,
+textarea::placeholder { color: #475569 !important; }
+
+input:not([type='radio'])::-moz-placeholder,
+textarea::-moz-placeholder { color: #475569 !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   2. FRONT PUBLIC PAGES
+   ───────────────────────────────────────────────────────────── */
+/* 2.1 /cities: white city-card titles on light background
+       (was rgb(255,255,255) on rgb(246,248,251) = 1.06:1) */
+.location-item__title-link { color: #1E293B !important; }
+
+/* 2.2 Muted counts / separators on white cards
+       (was rgb(148,163,184) = 2.56:1) */
+.lgx-cat__count,
+.lgx-city__count,
+.lgx-sep,
+span.time,
+.rating-star span,
+.rating__number,
+.rating-list__number,
+.lgx-auth-legal { color: #475569 !important; }
+
+/* 2.3 Section descriptions on tinted background
+       (was rgb(100,116,139) = 4.47:1 on rgb(246,248,251)) */
+.lgx-sec-head p,
+.lx-sec-sub,
+.section-heading__desc,
+.plans-referral-note { color: #475569 !important; }
+
+/* 2.4 CTA gradient band: heading was dark slate on the
+       indigo-violet gradient (2.84:1). Law: dark bg -> light text. */
+.lgx-band h2 { color: #FFFFFF !important; }
+
+/* 2.5 Auth brand panels (login/register): white text on the
+       gradient is the owner's rule; the h2 was dark (2.84:1).
+       The admin login variant also inherited slate text for the
+       pitch paragraph (1.09:1) and a bootstrap-blue logo mark
+       (1.43:1) via body.lgx-admin anchor rules. */
+.lgx-auth-brand .lgx-auth-pitch h2,
+.lgx-auth-brand .lgx-auth-pitch p,
+.lgx-auth-brand .lgx-mark { color: #FFFFFF !important; }
+
+/* 2.6 Register auto-assigned sponsor chip
+       (was rgb(100,116,139) = 4.26:1 on rgb(238,242,255)) */
+.lgx-sponsor b,
+.lgx-sponsor span:not(.lgx-sp-av):not(.lgx-sp-tag) { color: #475569 !important; }
+
+/* 2.7 Featured badge
+       (was rgb(5,150,105) = 3.58:1 on rgb(236,253,245)) */
+.lgx-badge-green { color: #047857 !important; }
+
+/* 2.8 Header CTA button: the gradient primary button inherited the
+       nav link color var(--lgx-ink3) via ".lgx-nav a" (0,1,1), which
+       outranks ".btn-lgx-primary" (0,1,0) and left slate text on the
+       gradient (1.2:1 on /user/password/reset). */
+.lgx-nav a.btn-lgx-primary,
+a.btn-lgx-primary { color: #FFFFFF !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   3. SHARED: TABLES, LABELS, MUTED TEXT, CHIPS
+   ───────────────────────────────────────────────────────────── */
+/* 3.1 Table headers (was rgb(148,163,184) = 2.48:1 on rgb(250,251,253)) */
+.table thead th,
+.table tfoot th { color: #475569 !important; }
+
+/* 3.2 Form labels on tinted cards (was rgb(100,116,139) = 4.47:1) */
+.form--label { color: #475569 !important; }
+
+/* 3.3 Bootstrap muted text on tinted surfaces
+       (was rgb(108,117,125) = 4.41-4.48:1) */
+.text-muted { color: #475569 !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   4. MEMBER AREA (demo)
+   ───────────────────────────────────────────────────────────── */
+/* 4.1 Sidebar section labels + dashboard captions
+       (was rgb(148,163,184) = 2.56:1 on white) */
+.lx-side__label,
+.caption { color: #475569 !important; }
+
+/* 4.2 Rank / status chips (was rgb(100,116,139) = 4.34:1 on rgb(241,245,249)) */
+.lx-chip { color: #475569 !important; }
+
+/* 4.3 Status badges: tinted-pill variants with too-light text */
+.badge--success { color: #047857 !important; } /* was rgb(5,150,105) 3.77:1 */
+.badge--info    { color: #0E7490 !important; } /* was rgb(8,145,178) 3.56:1 */
+.badge--danger  { color: #B91C1C !important; } /* was rgb(220,38,38) 4.41:1 */
+.badge--primary { color: #C2410C !important; } /* was rgb(240,115,5) 2.93:1 */
+.badge--warning { color: #B45309 !important; }
+.badge--dark    { color: #334155 !important; } /* was rgb(100,116,139) 4.34:1 */
+
+/* 4.3b Same badges inside the member dashboard wrapper, where
+       assets/global/css/leadxgpt.css pins the old colors with
+       !important at 2-class specificity. */
+.lx-dash .badge--success { color: #047857 !important; } /* was 3.77:1 */
+.lx-dash .badge--info    { color: #0E7490 !important; } /* was 3.56:1 */
+.lx-dash .badge--danger  { color: #B91C1C !important; } /* was 4.41:1 */
+
+/* 4.4 Green icon tile (was rgb(5,150,105) = 3.58:1 on rgb(236,253,245)) */
+.ico.lx-green { color: #047857 !important; }
+
+/* 4.5 Outline buttons: the raw pale accent text was removed with the
+       donor variant blocks (now leadxos.css line-outline contract, ink
+       text 10.4:1, brand hover 6.3:1), so the pinned hue overrides are
+       retired with it. */
+
+/* 4.6 Held-earnings banner: gradient card carries inline color:#fff
+       but its card-body renders WHITE, leaving white-50 text and the
+       white inline-styled icon invisible. Stylesheet !important beats
+       the non-important inline styles, so no blade edit is needed. */
+.card.custom--card .card-body .text-white-50 { color: #475569 !important; }
+.card.custom--card .card-body .ico { color: #475569 !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   5. ADMIN PANEL
+   ───────────────────────────────────────────────────────────── */
+/* 5.1 Sidebar: active/open section header is painted #4634FF by
+       assets/admin/css/app.css (.sidebar[class*="bg--"] ... rule,
+       specificity (0,5,0) !important) leaving a faint indigo label
+       on it (1.05:1). Normalize the header to the light active tint
+       used by the rest of the sidebar, and pin all its text/icons
+       dark. Selector mirrors the donor plus body to outrank it. */
+body.lgx-admin .sidebar[class*="bg--"] .sidebar__menu .sidebar-menu-item .side-menu--open,
+body.lgx-admin .sidebar[class*="bg--"] .sidebar__menu .sidebar-menu-item.active > a,
+body.lgx-admin .sidebar .sidebar-menu-item .side-menu--open,
+body.lgx-admin .sidebar .sidebar-menu-item.active > a {
+  background: #EEF2FF !important;
+  background-color: #EEF2FF !important;
+}
+body.lgx-admin .sidebar .sidebar-menu-item .side-menu--open,
+body.lgx-admin .sidebar .sidebar-menu-item .side-menu--open .menu-title,
+body.lgx-admin .sidebar .sidebar-menu-item .side-menu--open .menu-icon,
+body.lgx-admin .sidebar .sidebar-menu-item .side-menu--open .menu-label,
+body.lgx-admin .sidebar .sidebar-menu-item.active > a .menu-title,
+body.lgx-admin .sidebar .sidebar-menu-item.active > a .menu-icon {
+  color: #4338CA !important;
+}
+
+/* 5.2 Sidebar version strip keeps its dark navy background
+       (#071251, assets/admin/css/app.css 5471). Dark bg -> light text;
+       the strip labels were slate-800 on navy (1.67:1). */
+body.lgx-admin .sidebar .version-info .text--primary { color: #E2E8F0 !important; }
+body.lgx-admin .sidebar .version-info .text--success { color: #4ADE80 !important; }
+
+/* 5.3 Admin success amounts in tables (was rgb(40,199,111) = 2.21:1) */
+body.lgx-admin .text--success { color: #166534 !important; }
+
+/* 5.4 Info links (was rgb(30,159,242) = 2.88:1) */
+body.lgx-admin .text--info { color: #0369A1 !important; }
+
+/* 5.5 Username "@" links in tables (was rgb(0,123,255) = 3.98:1) */
+body.lgx-admin .table .small a,
+body.lgx-admin .table .small a span { color: #1D4ED8 !important; }
+
+/* 5.6 Dashboard widget titles on white cards
+       (was rgb(148,163,184) = 2.56:1) */
+.widget-seven__content-title,
+.widget-card-title { color: #475569 !important; }
+
+/* 5.7 Topbar search shortcut chip and kbd keys
+       (was rgb(148,163,184) 2.56:1 and rgb(100,116,139) 4.34:1) */
+.navbar-search-shortcut__plus { color: #475569 !important; }
+.navbar-search-shortcut kbd { color: #475569 !important; }
+
+/* 5.8 Notification counter pill: white text on #EB2222 was 4.39:1 */
+.notification-count { background-color: #B91C1C !important; }
+
+/* 5.9 Secondary button: retired with the donor solid fill. .btn--secondary
+       now follows the LeadxOS quiet-secondary contract (white fill, line
+       border, ink text) via leadxos.css; the mid-gray contrast problem
+       no longer exists. */
+
+/* 5.10 Dark badge variant inside admin lead filters */
+body.lgx-admin .badge--dark { color: #334155 !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   6. SHARED FORM ADDONS  (/user/deposit currency prefix and any
+      other input-group-text: was rgb(100,116,139) = 4.34:1 on
+      rgb(241,245,249))
+   ───────────────────────────────────────────────────────────── */
+.input-group-text,
+.deposit-info__input-group-text { color: #475569 !important; }

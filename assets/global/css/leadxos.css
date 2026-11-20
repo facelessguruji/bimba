@@ -1,0 +1,340 @@
+/* ============================================================
+   LeadxOS - the single uniform design language of LeadxGPT.
+   This file is the single source of truth. It loads LAST and
+   wins the cascade. Master spec: /LeadxOS-PROMPT.md at repo root.
+   Laws: no !important (two documented donor-compat exceptions),
+   no inline styles, no em-dashes, Line Awesome icons only,
+   style .lgx-switch__track / .lxos-switch__track never a bare span.
+   ============================================================ */
+
+/* ================= TOKENS (verbatim, LeadxOS master spec) ================= */
+:root{
+  /* brand */
+  --lxos-brand:#4F46E5;
+  --lxos-brand-2:#7C3AED;
+  --lxos-grad:linear-gradient(135deg,#4F46E5,#7C3AED);
+  --lxos-brand-tint:#EEF2FF;
+  --lxos-brand-ring:rgba(79,70,229,.25);
+
+  /* ink */
+  --lxos-ink:#0F172A;
+  --lxos-ink-2:#334155;
+  --lxos-ink-3:#64748B;
+  --lxos-ink-4:#94A3B8;
+
+  /* surface */
+  --lxos-line:#E8EDF3;
+  --lxos-line-2:#F1F5F9;
+  --lxos-canvas:#FFFFFF;
+  --lxos-bg:#F6F8FB;
+
+  /* status pairs (tint + text are welded, never split) */
+  --lxos-ok:#059669;      --lxos-ok-text:#047857;   --lxos-ok-tint:#ECFDF5;
+  --lxos-warn:#D97706;    --lxos-warn-text:#B45309; --lxos-warn-tint:#FFFBEB;
+  --lxos-bad:#DC2626;     --lxos-bad-text:#B91C1C;  --lxos-bad-tint:#FEF2F2;
+  --lxos-info-text:#1D4ED8;  --lxos-info-tint:#EFF6FF;
+  --lxos-violet-text:#6D28D9; --lxos-violet-tint:#F5F3FF;
+
+  /* dark surface */
+  --lxos-dark:#0F172A;
+  --lxos-dark-2:#1E293B;
+
+  /* geometry */
+  --lxos-r-sm:8px; --lxos-r:10px; --lxos-r-md:14px; --lxos-r-lg:16px;
+  --lxos-r-xl:24px; --lxos-r-pill:999px;
+
+  /* depth */
+  --lxos-sh1:0 1px 2px rgba(15,23,42,.05);
+  --lxos-sh2:0 8px 24px rgba(15,23,42,.07);
+  --lxos-sh3:0 16px 48px rgba(79,70,229,.16);
+
+  /* spacing (4px scale, nothing off-scale) */
+  --lxos-s1:4px; --lxos-s2:8px; --lxos-s3:12px; --lxos-s4:16px;
+  --lxos-s5:20px; --lxos-s6:24px; --lxos-s8:32px; --lxos-s10:40px;
+  --lxos-s14:56px; --lxos-s16:64px;
+
+  /* stack */
+  --lxos-z-nav:60; --lxos-z-topbar:1029; --lxos-z-sidebar:1040;
+  --lxos-z-overlay:1035; --lxos-z-dropdown:1200; --lxos-z-modal:1300;
+  --lxos-z-toast:1400;
+
+  /* type */
+  --lxos-font:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --lxos-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+
+/* ================= BASE ================= */
+body{font-family:var(--lxos-font)}
+
+/* ================= BUTTONS (contracts) ================= */
+.lxos-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:0;cursor:pointer;font:600 14px/1 var(--lxos-font);height:40px;
+  padding:0 20px;border-radius:var(--lxos-r);text-decoration:none;
+  transition:filter .18s ease,transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease,color .18s ease}
+.lxos-btn-primary{background:var(--lxos-grad);color:#fff;box-shadow:var(--lxos-sh3)}
+.lxos-btn-primary:hover{filter:brightness(1.07);transform:translateY(-1px);color:#fff}
+.lxos-btn-outline{background:#fff;color:var(--lxos-ink-2);border:1px solid var(--lxos-line)}
+.lxos-btn-outline:hover{border-color:var(--lxos-brand);color:var(--lxos-brand)}
+.lxos-btn-ghost{background:transparent;color:var(--lxos-ink-3)}
+.lxos-btn-ghost:hover{background:var(--lxos-line-2);color:var(--lxos-ink)}
+.lxos-btn-sm{height:34px;padding:0 14px;font-size:13px}
+.lxos-btn-lg{height:48px;padding:0 26px;font-size:15px}
+.lxos-btn[disabled]{opacity:.55;cursor:not-allowed;box-shadow:none}
+
+/* buttons: FULL UNIFORMITY MAPPING (existing blades keep their classes,
+   LeadxOS provides the look). One geometry law:
+   default 40px / radius 10 / 600 14px, sm = 34px / 13px, h-45 = 48px.
+   One variant law: primary variants = brand gradient, success = ok green,
+   danger = bad red, dark = dark surface, outlines = line border with
+   brand hover. One focus law: brand ring. Icons inside buttons are 1em. */
+.btn{height:40px;border-radius:var(--lxos-r);font:600 14px/1.2 var(--lxos-font);
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  transition:filter .18s ease,transform .18s ease,color .18s ease,border-color .18s ease,background .18s ease}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 3px var(--lxos-brand-ring)}
+.btn i,.btn .las,.btn .lab{font-size:1em;line-height:1}
+.btn-sm,.btn.btn-sm{height:34px;padding:0 14px;font-size:13px;border-radius:var(--lxos-r)}
+.btn--sm{height:34px;padding:0 14px;font-size:13px}
+.h-45{height:48px}
+
+/* primary family: brand gradient, white text, lift on hover.
+   Solid family carries explicit !important white: donor main.css forces
+   .btn{color:hsl(var(--white))!important} on the basic template, so every
+   mapped button needs an explicit matching color or the donor white leaks
+   onto light surfaces (donor-compat exception, same class as the badge
+   block above). */
+.btn--base,.btn--primary{background:var(--lxos-grad);border:0;color:#fff !important;box-shadow:var(--lxos-sh3)}
+.btn--base:hover,.btn--primary:hover{filter:brightness(1.07);transform:translateY(-1px);color:#fff !important}
+/* status family: solid tokens, white text */
+.btn--success{background:var(--lxos-ok);border:0;color:#fff !important}
+.btn--success:hover{filter:brightness(1.06);color:#fff !important}
+.btn--danger,.btn--dangerous{background:var(--lxos-bad);border:0;color:#fff !important}
+.btn--danger:hover,.btn--dangerous:hover{filter:brightness(1.06);color:#fff !important}
+.btn--dark{background:var(--lxos-dark);border:0;color:#fff !important}
+.btn--dark:hover{filter:brightness(1.15);color:#fff !important}
+/* outline family: line border, ink text, brand hover. Ink !important so
+   the donor .btn white !important cannot render white text on the white
+   outline surface (the owner-visible white-on-white bug). */
+.btn-outline--base,.btn-outline--primary,.btn-outline--dark,.btn-outline--info,.btn-outline--danger{
+  background:#fff;border:1px solid var(--lxos-line);color:var(--lxos-ink-2) !important}
+.btn-outline--base:hover,.btn-outline--primary:hover,.btn-outline--dark:hover,
+.btn-outline--info:hover,.btn-outline--danger:hover{
+  border-color:var(--lxos-brand);color:var(--lxos-brand) !important;background:#fff}
+/* dark-surface outline (admin dark headers): white border and text */
+.btn-outline-light{background:transparent;border:1px solid rgba(255,255,255,.55);color:#fff}
+.btn-outline-light:hover{background:#fff;color:var(--lxos-ink)}
+/* pricing Buy Now: solid gradient at rest (contract law), lift on hover */
+.pricing-card__button,.pricing-card.active .pricing-card__button{
+  background:var(--lxos-grad);color:#fff;border:0;box-shadow:var(--lxos-sh3)}
+.pricing-card__button:hover,.pricing-card__button:focus,
+.pricing-card.active .pricing-card__button:hover{filter:brightness(1.07);color:#fff;
+  transform:translateY(-1px)}
+/* front generic button */
+.cmn-btn{height:40px;border-radius:var(--lxos-r);font:600 14px/1.2 var(--lxos-font);
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--lxos-grad);color:#fff;border:0;transition:filter .18s ease,transform .18s ease}
+.cmn-btn:hover{filter:brightness(1.07);color:#fff;transform:translateY(-1px)}
+/* copy/submit buttons inside input groups: match the input, not the 40px law */
+.input-group-text.btn--base,.input-group-text.btn--primary,.input-group-text.btn--base.text-white{
+  height:100%;min-height:44px;border-radius:0 var(--lxos-r) var(--lxos-r) 0;
+  box-shadow:none;transform:none;color:#fff !important}
+
+/* PUBLIC BUTTON FAMILY (.btn-lgx): same one-geometry law as the admin
+   .btn family above. Heights are fixed, not padding-derived (the old
+   padding-based rules rendered 35-42px across pages): default 40px,
+   sm 34px, lg 48px. Radius 10 everywhere (the hero search button is
+   un-pilled too). Primary = brand gradient with lift, ghost/outline =
+   the line-outline contract, one brand focus ring for the whole family. */
+.btn-lgx{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;
+  font:600 14px/1 var(--lxos-font);height:40px;padding:0 20px;border-radius:var(--lxos-r);text-decoration:none;
+  transition:filter .18s ease,transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease,color .18s ease}
+.btn-lgx:focus-visible{outline:none;box-shadow:0 0 0 3px var(--lxos-brand-ring)}
+.btn-lgx i,.btn-lgx .las,.btn-lgx .lab{font-size:1em;line-height:1}
+.btn-lgx-primary{background:var(--lxos-grad);color:#fff;box-shadow:var(--lxos-sh3)}
+.btn-lgx-primary:hover{filter:brightness(1.07);transform:translateY(-1px);color:#fff}
+.btn-lgx-ghost,.btn-lgx-outline{background:#fff;color:var(--lxos-ink-2);border:1px solid var(--lxos-line)}
+.btn-lgx-ghost:hover,.btn-lgx-outline:hover{border-color:var(--lxos-brand);color:var(--lxos-brand);background:#fff}
+.btn-lgx-sm{height:34px;padding:0 14px;font-size:13px}
+.btn-lgx-lg{height:48px;padding:0 26px;font-size:15px;border-radius:var(--lxos-r)}
+.btn-lgx-block{width:100%}
+.btn-lgx[disabled]{opacity:.55;cursor:not-allowed;box-shadow:none}
+.lgx-hero__search .btn-lgx{border-radius:var(--lxos-r)}
+
+/* ADMIN VARIANT LEFTOVERS (mapped after the donor app.css strip):
+   every remaining donor variant class falls back to the same contracts.
+   Outlines (success/warning/secondary) = line border, ink text, brand
+   hover, matching the outline group above. Solid secondary/light =
+   quiet secondary actions (outline and ghost look). Info/warning are
+   status chips here (active filter tab, status indicator), so they use
+   the welded tint+text pairs instead of donor solids whose white text
+   fails contrast. Ink/tint colors carry !important because these classes
+   can combine with .btn on basic-template pages, where donor main.css
+   forces white text with !important (see the solid family note above). */
+.btn-outline--success,.btn-outline--warning,.btn-outline--secondary{
+  background:#fff;border:1px solid var(--lxos-line);color:var(--lxos-ink-2) !important}
+.btn-outline--success:hover,.btn-outline--warning:hover,.btn-outline--secondary:hover{
+  border-color:var(--lxos-brand);color:var(--lxos-brand) !important;background:#fff}
+.btn--secondary{background:#fff;border:1px solid var(--lxos-line);color:var(--lxos-ink-2) !important}
+.btn--secondary:hover{border-color:var(--lxos-brand);color:var(--lxos-brand) !important;background:#fff}
+.btn--light{background:transparent;border:0;color:var(--lxos-ink-3) !important}
+.btn--light:hover{background:var(--lxos-line-2);color:var(--lxos-ink) !important}
+.btn--info{background:var(--lxos-info-tint);color:var(--lxos-info-text) !important;border:0}
+.btn--warning{background:var(--lxos-warn-tint);color:var(--lxos-warn-text) !important;border:0}
+
+/* ================= CARDS (contracts) ================= */
+.lxos-card{background:var(--lxos-canvas);border:1px solid var(--lxos-line);
+  border-radius:var(--lxos-r-lg);box-shadow:var(--lxos-sh1);padding:24px}
+.lxos-card__head{display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--lxos-line-2)}
+.lxos-card__title{font:700 15px/1.3 var(--lxos-font);color:var(--lxos-ink);margin:0}
+.lxos-card__sub{font:500 12.5px/1.4 var(--lxos-font);color:var(--lxos-ink-3);margin:2px 0 0}
+.lxos-subcard{background:var(--lxos-bg);border:1px solid var(--lxos-line-2);
+  border-radius:var(--lxos-r-md);padding:16px}
+a.lxos-card:hover{border-color:#C7D2FE;box-shadow:var(--lxos-sh2);transform:translateY(-2px)}
+
+/* cards: compatibility mapping. Uniform card surface everywhere:
+   white, one line, radius 16, soft shadow. Sub-cards carry no shadow. */
+body.lgx-admin .card{border-radius:var(--lxos-r-lg)}
+.card.custom--card{border-radius:var(--lxos-r-lg)}
+.card .card-title{font:700 15px/1.3 var(--lxos-font);color:var(--lxos-ink)}
+.card .card-header{background:transparent}
+
+/* ================= STAT CARD (contracts) ================= */
+.lxos-stat{display:flex;align-items:center;gap:14px;background:var(--lxos-canvas);
+  border:1px solid var(--lxos-line);border-radius:var(--lxos-r-lg);
+  box-shadow:var(--lxos-sh1);padding:20px;min-width:0}
+.lxos-stat__tile{width:44px;height:44px;border-radius:12px;display:grid;
+  place-items:center;font-size:20px;flex:none}
+.lxos-stat__body{display:flex;flex-direction:column;gap:2px;min-width:0}
+.lxos-stat__label{font:700 11px/1.3 var(--lxos-font);color:var(--lxos-ink-3);
+  text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lxos-stat__value{font:800 22px/1.2 var(--lxos-font);color:var(--lxos-ink);
+  letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.lxos-stat__note{font:500 12px/1.4 var(--lxos-font);color:var(--lxos-ink-3)}
+.lxos-stat__go{margin-left:auto;color:var(--lxos-ink-4);font-size:16px}
+
+.lxos-tint-brand{background:var(--lxos-brand-tint);color:var(--lxos-brand)}
+.lxos-tint-ok{background:var(--lxos-ok-tint);color:var(--lxos-ok)}
+.lxos-tint-warn{background:var(--lxos-warn-tint);color:var(--lxos-warn)}
+.lxos-tint-bad{background:var(--lxos-bad-tint);color:var(--lxos-bad)}
+.lxos-tint-violet{background:var(--lxos-violet-tint);color:var(--lxos-violet-text)}
+
+/* ================= BADGES (contracts) ================= */
+.lxos-badge{display:inline-flex;align-items:center;gap:6px;
+  font:600 12px/1 var(--lxos-font);padding:5px 11px;border-radius:var(--lxos-r-pill);border:0}
+.lxos-badge .lxos-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.lxos-badge-ok{background:var(--lxos-ok-tint);color:var(--lxos-ok-text)}
+.lxos-badge-warn{background:var(--lxos-warn-tint);color:var(--lxos-warn-text)}
+.lxos-badge-bad{background:var(--lxos-bad-tint);color:var(--lxos-bad-text)}
+.lxos-badge-info{background:var(--lxos-info-tint);color:var(--lxos-info-text)}
+.lxos-badge-brand{background:var(--lxos-brand-tint);color:var(--lxos-brand)}
+.lxos-badge-neutral{background:var(--lxos-line-2);color:var(--lxos-ink-3)}
+
+/* badges: compatibility mapping. Tint + text travel together, always. */
+.badge--success{background:var(--lxos-ok-tint)!important;color:var(--lxos-ok-text)!important}
+.badge--warning{background:var(--lxos-warn-tint)!important;color:var(--lxos-warn-text)!important}
+.badge--danger,.badge--dangerous{background:var(--lxos-bad-tint)!important;color:var(--lxos-bad-text)!important}
+.badge--info{background:var(--lxos-info-tint)!important;color:var(--lxos-info-text)!important}
+.badge--primary{background:var(--lxos-brand-tint)!important;color:var(--lxos-brand)!important}
+.badge--secondary,.badge--dark{background:var(--lxos-line-2)!important;color:var(--lxos-ink-3)!important}
+
+/* ================= TABLES (contracts) ================= */
+.lxos-table{width:100%;border-collapse:collapse}
+.lxos-table thead th{font:700 11px/1.3 var(--lxos-font);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--lxos-ink-3);background:#FAFBFD;
+  padding:11px 16px;text-align:left;border-bottom:1px solid var(--lxos-line)}
+.lxos-table tbody td{font:500 13.5px/1.5 var(--lxos-font);color:var(--lxos-ink-2);
+  padding:13px 16px;border-bottom:1px solid var(--lxos-line-2);vertical-align:middle}
+.lxos-table tbody tr:hover td{background:#FAFBFD}
+.lxos-table .num{text-align:right;font-variant-numeric:tabular-nums}
+.lxos-table thead th.num{text-align:right}
+.lxos-table tbody tr:last-child td{border-bottom:0}
+
+/* tables: compatibility mapping (uniform header typography + row hover
+   inside cards, without touching each table's own padding system) */
+body.lgx-admin .card table thead th,
+.template--table thead th,
+.custom--table thead th{font:700 11px/1.3 var(--lxos-font);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--lxos-ink-3)}
+body.lgx-admin .card table tbody td,
+.template--table tbody td,
+.custom--table tbody td{font:500 13.5px/1.5 var(--lxos-font);color:var(--lxos-ink-2)}
+body.lgx-admin .card table tbody tr:hover td{background:#FAFBFD}
+
+/* ================= FORMS (contracts) ================= */
+.lxos-field{margin-bottom:16px}
+.lxos-label{display:block;font:600 13px/1 var(--lxos-font);color:var(--lxos-ink-2);margin-bottom:8px}
+.lxos-input{width:100%;height:44px;padding:0 14px;font:500 14px/1.4 var(--lxos-font);
+  color:var(--lxos-ink);background:#fff;border:1px solid var(--lxos-line);
+  border-radius:var(--lxos-r);outline:none;transition:border-color .15s ease,box-shadow .15s ease}
+.lxos-input:focus{border-color:var(--lxos-brand);box-shadow:0 0 0 3px var(--lxos-brand-ring)}
+.lxos-input::placeholder{color:var(--lxos-ink-3)}
+.lxos-hint{display:block;font:500 12.5px/1.5 var(--lxos-font);color:var(--lxos-ink-3);margin-top:6px}
+.lxos-err{display:block;font:500 12.5px/1.5 var(--lxos-font);color:var(--lxos-bad-text);margin-top:6px}
+
+/* forms: compatibility mapping. One focus experience everywhere:
+   brand border + 3px brand ring. Labels above fields. */
+.form--control,.form-control{border-color:var(--lxos-line);border-radius:var(--lxos-r);
+  transition:border-color .15s ease,box-shadow .15s ease}
+.form--control:focus,.form-control:focus{border-color:var(--lxos-brand);
+  box-shadow:0 0 0 3px var(--lxos-brand-ring);outline:none}
+.form--label{font:600 13px/1 var(--lxos-font);color:var(--lxos-ink-2)}
+select.form--control,select.form-control{height:auto;min-height:44px}
+/* inputs without the form classes (admin search fields, admin code
+   boxes) keep the same brand focus experience after the donor focus
+   block was stripped from app.css */
+body.lgx-admin input:focus:not([type='checkbox']):not([type='radio']),
+body.lgx-admin textarea:focus,body.lgx-admin select:focus{
+  border-color:var(--lxos-brand);box-shadow:0 0 0 3px var(--lxos-brand-ring);outline:none}
+/* member panel: scoped rescues so donor resets (box-shadow none/unset)
+   cannot strip the ring inside .lx-dash */
+.lx-dash .form--control:focus,.lx-dash .form-control:focus{
+  border-color:var(--lxos-brand);box-shadow:0 0 0 3px var(--lxos-brand-ring)}
+/* home hero search: pill input keeps its tint and gains the brand ring */
+.lgx-hero__search input:focus{box-shadow:0 0 0 3px var(--lxos-brand-ring)}
+
+/* ================= SWITCH (contracts) =================
+   Anatomy law: style only the __track class, never a bare span.
+   The .lgx-switch alias keeps the existing blades rendering as LeadxOS. */
+.lxos-switch,.lgx-switch{position:relative;display:inline-flex;align-items:center;gap:10px;cursor:pointer}
+.lxos-switch input,.lgx-switch input{position:absolute;opacity:0;width:0;height:0}
+.lxos-switch .lxos-switch__track,.lgx-switch .lgx-switch__track{
+  position:relative;flex:none;width:46px;height:24px;background:#E2E8F0;
+  border-radius:var(--lxos-r-pill);box-shadow:inset 0 1px 2px rgba(15,23,42,.08);
+  transition:background .2s ease}
+.lxos-switch .lxos-switch__track::before,.lgx-switch .lgx-switch__track::before{
+  content:'';position:absolute;width:18px;height:18px;border-radius:50%;
+  background:#fff;top:3px;left:3px;box-shadow:0 1px 3px rgba(15,23,42,.3);
+  transition:transform .2s cubic-bezier(.4,0,.2,1)}
+.lxos-switch:hover .lxos-switch__track,.lgx-switch:hover .lgx-switch__track{background:#CBD5E1}
+.lxos-switch input:checked ~ .lxos-switch__track,.lgx-switch input:checked ~ .lgx-switch__track{background:var(--lxos-grad)}
+.lxos-switch input:checked ~ .lxos-switch__track::before,.lgx-switch input:checked ~ .lgx-switch__track::before{transform:translateX(22px)}
+.lxos-switch input:focus-visible ~ .lxos-switch__track,.lgx-switch input:focus-visible ~ .lxos-switch__track{box-shadow:0 0 0 3px var(--lxos-brand-ring)}
+.lxos-switch .lxos-state-on{display:none;color:var(--lxos-ok-text);font:600 12px/1 var(--lxos-font)}
+.lxos-switch .lxos-state-off{display:inline;color:var(--lxos-bad-text);font:600 12px/1 var(--lxos-font)}
+.lxos-switch input:checked ~ .lxos-state-on{display:inline}
+.lxos-switch input:checked ~ .lxos-state-off{display:none}
+
+/* ================= EMPTY STATE (contracts) ================= */
+.lxos-empty{grid-column:1/-1;text-align:center;padding:40px 20px}
+.lxos-empty__ico{width:56px;height:56px;border-radius:50%;background:var(--lxos-line-2);
+  color:var(--lxos-ink-4);display:grid;place-items:center;font-size:20px;margin:0 auto 12px}
+.lxos-empty__title{font:600 14px/1.4 var(--lxos-font);color:var(--lxos-ink);margin:0}
+.lxos-empty__note{font:500 13px/1.5 var(--lxos-font);color:var(--lxos-ink-3);margin:4px 0 0}
+
+/* ================= MODALS (contracts) ================= */
+.modal-content{border:1px solid var(--lxos-line);border-radius:var(--lxos-r-lg);
+  box-shadow:var(--lxos-sh2)}
+.modal-header{border-bottom:1px solid var(--lxos-line-2)}
+.modal-footer{border-top:1px solid var(--lxos-line-2);justify-content:flex-end;gap:8px}
+
+/* ================= TOASTS (contracts) ================= */
+.iziToast{border-radius:var(--lxos-r-md)}
+
+/* ================= ADMIN CHROME (compatibility) =================
+   Sidebar, topbar and version strip follow the LeadxOS nav laws.
+   The approved admin chrome already renders this way; these rules pin it. */
+body.lgx-admin .sidebar .link-item .link,
+body.lgx-admin .side-navbar .nav-link{border-radius:10px}
+body.lgx-admin .navbar-version,
+body.lgx-admin .side-navbar footer span{background:transparent;color:var(--lxos-ink-3)}

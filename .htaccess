@@ -1,0 +1,41 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # ---- hardening: block dotfiles and sensitive paths ----
+    # core/ and tests/ are fully blocked; install/ stays reachable ONLY so the
+    # wizard can run (it self-guards with a 403 once core/.env exists) while
+    # its data files (raw schema + env template) stay blocked
+    RewriteRule (^\.|/\.) - [F]
+    RewriteRule ^(core|tests)/ - [F]
+    RewriteRule ^install/(database\.sql|env\.template)$ - [F]
+
+    # ---- hardening: no PHP execution inside the uploads folder ----
+    # allow the legit dynamic stylesheet, everything else stays blocked
+    # [NC]: Apache mod_mime matches extensions case-insensitively, so the
+    # block must too (x.PHP would otherwise slip through)
+    RewriteRule ^assets/templates/basic/css/color\.php$ - [NC,L]
+    RewriteRule ^assets/(.*)\.(php|phtml|php3|php4|php5|php7|pht|phar)$ - [NC,F]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    <Files .env>
+        Order allow,deny
+        Deny from all
+    </Files>
+</IfModule>

@@ -1,0 +1,201 @@
+/* =====================================================================
+   LEADXGPT AGENT MOBILE - dedicated mobile-friendly stylesheet
+   Owned by Agent MOBILE only. Loaded after leadxgpt-polish.css and
+   before leadxgpt-contrast.css in both layouts (public + admin).
+   Rules are tight and scoped; quality bar: zero horizontal overflow,
+   44px tap targets, stacked grids, in-container table scrolling.
+   ===================================================================== */
+
+/* ===================== Global safety nets ===================== */
+html { -webkit-text-size-adjust: 100%; }
+body { overflow-x: hidden; } /* propagated to viewport; position:sticky still works */
+img, svg, video, iframe, embed, object { max-width: 100%; }
+
+/* ===================== Public header + burger nav ===================== */
+/* Below 921px the nav collapses under the brand; the header row must
+   wrap so the open menu drops full-width BELOW the logo instead of
+   being squeezed into a clipped column beside it. */
+@media (max-width: 920px) {
+    .lgx-header__in {
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 64px;
+        gap: 0 12px;
+    }
+    .lgx-header .lgx-logo b { white-space: nowrap; }
+    .lgx-burger {
+        margin-left: auto;
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 12px;
+        font-size: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    /* open state: full width, readable, big tap targets */
+    .lgx-nav.collapse.show,
+    .lgx-nav.collapsing {
+        flex: 1 0 100%;
+        width: 100%;
+        padding: 10px 4px 14px;
+    }
+    .lgx-nav a {
+        width: 100%;
+        padding: 11px 4px;
+        font-size: 15px;
+        line-height: 1.4;
+        border-bottom: 1px solid var(--lgx-line2, #F1F5F9);
+    }
+    .lgx-nav a:last-of-type { border-bottom: 0; }
+    .lgx-nav__cta {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin: 10px 0 0;
+    }
+    .lgx-nav__cta .btn-lgx {
+        width: 100%;
+        min-height: 46px;
+        justify-content: center;
+    }
+}
+
+/* ===================== Member panel (lx-dash shell) ===================== */
+/* leadxgpt.css loads after this file, so member rules use the
+   .lx-dash-scoped double class for a winning specificity. */
+@media (max-width: 767px) {
+    /* long page titles must never push the avatar cluster off-screen */
+    .lx-dash .lx-dash__title {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+    }
+    .lx-dash .lx-dash__actions { flex: 0 0 auto; }
+    .lx-dash .lx-dash__burger {
+        min-width: 44px;
+        min-height: 44px;
+        justify-content: center;
+        align-items: center;
+    }
+    /* comfortable 44px nav rows inside the drawer */
+    .lx-dash .lx-side__link { padding-top: 12px; padding-bottom: 12px; }
+}
+
+/* ===================== Stacked tables (member + public) ===================== */
+/* The template turns td into flex at <=991px, which shreds cells that
+   contain stacked inline content (strong + br + small): every child
+   becomes a flex item and short values wrap letter by letter. Use the
+   classic label-above-value pattern instead. */
+@media (max-width: 767px) {
+    .table--responsive--lg tbody tr td,
+    .table--responsive--xl tbody tr td,
+    .table--responsive--md tbody tr td {
+        display: block !important;
+        text-align: left !important;
+    }
+    .table--responsive--lg tbody tr td::before,
+    .table--responsive--xl tbody tr td::before,
+    .table--responsive--md tbody tr td::before {
+        content: attr(data-label);
+        display: block !important;
+        width: auto !important;
+        font-size: 12px;
+        font-weight: 600;
+        color: #64748b;
+        text-align: left;
+        margin: 0 0 3px;
+    }
+    .table--responsive--lg tbody tr td:last-child,
+    .table--responsive--xl tbody tr td:last-child,
+    .table--responsive--md tbody tr td:last-child {
+        border-bottom: 1px solid hsl(0 0% 0% / .08);
+    }
+}
+
+/* Stat tiles inside half-width columns: at phone widths the icon leaves
+   the text column 1px, so uppercase captions wrap letter by letter.
+   Stack caption + digit above the icon instead. */
+@media (max-width: 479px) {
+    .lx-dash .lx-stat {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+    }
+    .lx-dash .lx-stat > div { width: 100%; }
+    .lx-dash .lx-stat .caption { white-space: normal; }
+    .lx-dash .lx-stat .ico { flex: 0 0 40px; width: 40px; height: 40px; font-size: 18px; }
+}
+
+/* ===================== Inline form rows + toolbar buttons ===================== */
+@media (max-width: 575px) {
+    /* search/toolbars: input shrinks, button keeps its word intact */
+    form.d-flex .form-control,
+    form.d-flex .form--control { min-width: 0; }
+    form .btn,
+    form .btn-sm,
+    form .btn--sm { white-space: nowrap; }
+}
+
+/* btn--outline-dark is used by the referral filter tabs but was never
+   defined anywhere, and main.css forces .btn color to white, leaving
+   inactive tabs invisible. Minimal visible outline style (layout only). */
+.btn--outline-dark {
+    background: #fff !important;
+    border: 1px solid #CBD5E1 !important;
+    color: #334155 !important;
+}
+
+/* ===================== Admin panel (lgx-admin) ===================== */
+/* Off-canvas sidebar: the full-width logo link sits over the close
+   button (un clickable) and the X is only 36px. Raise it and size it
+   to a comfortable tap target. */
+@media (max-width: 991px) {
+    .sidebar .res-sidebar-close-btn {
+        width: 44px;
+        height: 44px;
+        /* .sidebar__inner stacks at z-index:11111 and its full-width logo
+           image otherwise swallows the tap; go above it. */
+        z-index: 12000;
+    }
+    /* comfortable tap height for drawer links */
+    .sidebar .dropdown-menu__item > a,
+    .sidebar .sidebar-dropdown a,
+    .sidebar .navbar-nav .nav-link {
+        padding-top: 11px;
+        padding-bottom: 11px;
+    }
+}
+
+/* Floating "configure card" launcher covers content while scrolling;
+   shrink it on phones so it hides less of the page. */
+@media (max-width: 575px) {
+    .configure-card-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+    }
+    .configure-card-wrapper {
+        bottom: 14px;
+        right: 14px !important;
+    }
+}
+
+/* ===================== Auth surfaces (login / register) ===================== */
+@media (max-width: 420px) {
+    /* sponsor/referrer strip: text gets the full row, the tag drops to
+       its own line under the text (aligned with it), never a 1px column */
+    .lgx-sponsor { flex-wrap: wrap; row-gap: 6px; }
+    .lgx-sponsor > span:not(.lgx-sp-av):not(.lgx-sp-tag) {
+        flex: 1 1 calc(100% - 56px);
+        min-width: 0;
+    }
+    .lgx-sponsor .lgx-sp-tag {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        margin-left: 52px;
+        letter-spacing: .04em;
+    }
+}

@@ -1,0 +1,43 @@
+/* ============================================================
+   LeadxGPT - FRONT layer (Agent FRONT)
+   Public + member experience fixes that need styling.
+   Loaded LAST in both layouts (after uiux.css), so any rule
+   here wins over earlier layers. Keep this file small and
+   scoped: presentation fixes only, no donor selectors.
+   ============================================================ */
+
+/* --- Pricing page: plan cards ------------------------------- */
+
+/* plan title chip on each pricing card (blade: plans.blade.php) */
+.pricing-card__title {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #4F46E5;
+    background: #EEF2FF;
+    border-radius: 999px;
+    padding: 5px 14px;
+    margin-bottom: 8px;
+    padding-top: 5px;
+}
+
+/* entitlement rows: keep the numeric value readable on one line */
+.pricing-card__item span:last-child {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* --- Listing detail page ------------------------------------ */
+
+/* HTMLPurifier output now renders in a div (was a <p>, which
+   browsers auto-closed around block elements). Keep the flow tidy. */
+.listing-details__desc > :first-child { margin-top: 0; }
+.listing-details__desc > :last-child { margin-bottom: 0; }
+.listing-details__desc > * { line-height: 1.7; }
+
+/* --- Member: buy plan summary bar (user/buy_plan.blade.php) -- */
+.custom--card .card-body .text--base.fw-bold {
+    font-size: 18px;
+}
